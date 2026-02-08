@@ -5,7 +5,7 @@ import {
    ArrowRight,  Package, X, 
 } from 'lucide-react';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://abcde-ventures-assignment-znyq.onrender.com/api';
 
 
 const styles = {
