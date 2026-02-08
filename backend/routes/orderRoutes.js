@@ -1,104 +1,45 @@
-// const express = require('express');
-// const router = express.Router();
-// const Order = require('../models/Order');
-// const Cart = require('../models/Cart');
-// const auth = require('../middleware/auth');
-
-// // POST /orders - Convert the current cart into an order
-// router.post('/', auth, async (req, res) => {
-//     try {
-//         const cart = await Cart.findOne({ userId: req.user._id, status: 'active' });
-        
-//         if (!cart || cart.items.length === 0) {
-//             return res.status(400).send("Cart is empty");
-//         }
-//         const newOrder = new Order({
-//             userId: req.user._id,
-//             cartId: cart._id
-//         });
-//         await newOrder.save();
-
-//         cart.status = 'ordered';
-//         await cart.save();
-
-//         res.status(201).send({ message: "Order successful", orderId: newOrder._id });
-//     } catch (err) {
-//         res.status(500).send("Error placing order");
-//     }
-// });
-
-// // GET /orders - List all placed orders for the user
-// router.get('/', auth, async (req, res) => {
-//     try {
-//         const orders = await Order.find({ userId: req.user._id });
-//         res.send(orders);
-//     } catch (err) {
-//         res.status(500).send("Error fetching orders");
-//     }
-// });
-
-// router.post('/', auth, async (req, res) => {
-//   try {
-//     const cart = await Cart.findOne({ user_id: req.user._id });
-//     if (!cart || cart.items.length === 0) return res.status(400).send('Cart is empty');
-
-//     const newOrder = new Order({
-//       user_id: req.user._id,
-//       cart_id: cart._id,
-//       items: cart.items,
-//       status: 'completed'
-//     });
-
-//     await newOrder.save();
-    
-//     cart.items = [];
-//     await cart.save();
-
-//     res.status(201).send({ message: 'Order successful', orderId: newOrder._id });
-//   } catch (err) {
-//     res.status(500).send('Order processing failed');
-//   }
-// });
-
-// module.exports = router;
 const express = require('express');
 const router = express.Router();
-const Item = require('../models/Item');
-const { Cart, Order } = require('../models/Cart');
-const authenticate = require('../middleware/auth');
+const Order = require('../models/Order');
+const Cart = require('../models/Cart');
+const auth = require('../middleware/auth');
 
-// GET ITEMS
-router.get('/items', async (req, res) => {
-  const items = await Item.find();
-  res.json(items);
+router.post('/', auth, async (req, res) => {
+    try {
+        
+        const cart = await Cart.findOne({ userId: req.user._id });
+
+        if (!cart || cart.items.length === 0) {
+            return res.status(400).send("Checkout failed: Your cart is empty.");
+        }
+
+        
+        const newOrder = new Order({
+            userId: req.user._id,
+            cart_id: cart._id.toString(), 
+            items: cart.items, 
+            status: 'Completed'
+        });
+
+        await newOrder.save();
+
+        await Cart.deleteOne({ userId: req.user._id });
+
+        res.status(201).send("Order successful");
+    } catch (err) {
+        console.error("Checkout Error:", err);
+        res.status(500).send("Server error during checkout");
+    }
 });
 
-// ADD TO CART
-router.post('/cart', authenticate, async (req, res) => {
-  const { itemId } = req.body;
-  let cart = await Cart.findOne({ userId: req.user._id });
-  
-  if (!cart) cart = new Cart({ userId: req.user._id, items: [] });
-  
-  cart.items.push({ itemId });
-  await cart.save();
-  res.send("Item added to cart");
-});
 
-// CHECKOUT (Place Order)
-router.post('/checkout', authenticate, async (req, res) => {
-  const cart = await Cart.findOne({ userId: req.user._id });
-  
-  if (!cart || cart.items.length === 0) {
-    return res.status(400).send("Your cart is empty");
-  }
-
-  const newOrder = new Order({ userId: req.user._id, items: cart.items });
-  await newOrder.save();
-  
-  // Clear cart after order
-  await Cart.deleteOne({ userId: req.user._id });
-  res.send("Checkout successful");
+router.get('/', auth, async (req, res) => {
+    try {
+        const orders = await Order.find({ userId: req.user._id });
+        res.json(orders);
+    } catch (err) {
+        res.status(500).send("Error fetching order history");
+    }
 });
 
 module.exports = router;

@@ -1,238 +1,13 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-// import { ShoppingBag, LogOut, Plus, User, Lock, ArrowRight, CheckCircle } from 'lucide-react';
-
-// const API_BASE_URL = 'http://localhost:5000/api';
-
-// const styles = {
-//   loginPage: {
-//     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-//     display: 'flex', justifyContent: 'center', alignItems: 'center',
-//     backgroundColor: '#f8fafc', zIndex: 9999, fontFamily: 'system-ui, sans-serif'
-//   },
-//   authCard: {
-//     backgroundColor: '#ffffff',
-//     padding: '50px',
-//     borderRadius: '4px', // Requirement: Square box look
-//     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', // Requirement: Heavy shadow
-//     width: '100%',
-//     maxWidth: '620px', // Requirement: Specific width
-//     textAlign: 'center',
-//     border: '1px solid #e2e8f0'
-//   },
-//   dashboard: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     width: '100vw',
-//     minHeight: '100vh', // Fix: Ensures full height
-//     backgroundColor: '#f1f5f9',
-//     margin: 0,
-//     padding: 0
-//   },
-//   btnPrimary: (isLogin) => ({
-//     width: '100%',
-//     padding: '18px',
-//     borderRadius: '4px',
-//     border: 'none',
-//     backgroundColor: isLogin ? '#2563eb' : '#10b981',
-//     color: 'white',
-//     fontSize: '16px',
-//     fontWeight: 'bold',
-//     cursor: 'pointer',
-//     marginTop: '10px',
-//     display: 'flex',           // Ensures grouping
-//     justifyContent: 'center',  // Centers the group
-//     alignItems: 'center',      // Vertically aligns text and icon
-//     gap: '12px'                // Provides clean spacing between text and arrow
-//   }),
-//   checkoutBtn: {
-//     backgroundColor: '#000000',
-//     color: 'white',
-//     padding: '12px 28px',
-//     borderRadius: '4px',
-//     border: 'none',
-//     fontWeight: '900',
-//     cursor: 'pointer',
-//     fontSize: '12px',
-//     textTransform: 'uppercase',
-//     letterSpacing: '2px',
-//     display: 'flex',
-//     alignItems: 'center',
-//     gap: '8px'
-//   }
-// };
-
-// export default function App() {
-//   const [isLoggedIn, setIsLoggedIn] = useState(false);
-//   const [currentRoute, setCurrentRoute] = useState('LOGIN');
-
-//   const handleLogout = async () => {
-//     const token = localStorage.getItem('token');
-//     try {
-//       await axios.post(`${API_BASE_URL}/users/logout`, {}, { headers: { Authorization: `Bearer ${token}` } });
-//     } finally {
-//       localStorage.removeItem('token');
-//       setIsLoggedIn(false);
-//       setCurrentRoute('LOGIN');
-//       window.alert("Logout Complete");
-//     }
-//   };
-
-//   return (
-//     <>
-//       <style>{`
-//         html, body, #root { margin: 0; padding: 0; width: 100%; height: 100%; overflow-x: hidden; }
-//         * { box-sizing: border-box; }
-//       `}</style>
-      
-//       {currentRoute === 'LOGIN' ? (
-//         <div style={styles.loginPage}>
-//           <div style={styles.authCard}>
-//             <div style={{ marginBottom: '50px' }}>
-//               <ShoppingBag size={48} color="#2563eb" style={{ marginBottom: '20px' }} />
-//               <h1 style={{ fontSize: '42px', fontWeight: 900, fontStyle: 'italic', margin: 0 }}>ABCDE SHOPSY</h1>
-//               <p style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 'bold', marginTop: '12px', letterSpacing: '4px' }}>SECURE ACCESS PORTAL</p>
-//             </div>
-//             <LoginScreen setLoggedIn={setIsLoggedIn} onAuthSuccess={() => setCurrentRoute('HOME')} />
-//           </div>
-//         </div>
-//       ) : (
-//         <div style={styles.dashboard}>
-//           <Navbar onLogout={handleLogout} />
-//           <main style={{ flex: 1, padding: '40px 8%', width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
-//             <ItemList />
-//           </main>
-//           <footer style={{ padding: '30px', textAlign: 'center', background: 'white', borderTop: '1px solid #e2e8f0' }}>
-//             <p style={{ color: '#94a3b8', fontSize: '12px', fontWeight: 'bold' }}>ABCDE VENTURES © 2026</p>
-//           </footer>
-//         </div>
-//       )}
-//     </>
-//   );
-// }
-
-// function LoginScreen({ setLoggedIn, onAuthSuccess }) {
-//   const [isLogin, setIsLogin] = useState(true);
-//   const [creds, setCreds] = useState({ username: '', password: '' });
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const path = isLogin ? 'users/login' : 'users';
-//     try {
-//       const res = await axios.post(`${API_BASE_URL}/${path}`, creds);
-//       if (isLogin) {
-//         localStorage.setItem('token', res.data.token);
-//         setLoggedIn(true);
-//         onAuthSuccess();
-//       } else {
-//         window.alert("User account gets created. Please Login.");
-//         setIsLogin(true);
-//       }
-//     } catch (err) {
-//       if (err.response?.status === 403) {
-//         window.alert('You are already logged in on another device.');
-//       } else {
-//         window.alert('Invalid username/password');
-//       }
-//     }
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit} style={{ textAlign: 'left' }}>
-//       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '35px' }}>
-//         <div style={{ width: '8px', height: '28px', backgroundColor: isLogin ? '#2563eb' : '#10b981' }}></div>
-//         <h2 style={{ fontSize: '28px', fontWeight: 900 }}>{isLogin ? 'Sign In' : 'Sign Up'}</h2>
-//       </div>
-//       <input style={{ width: '100%', padding: '16px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '20px' }} type="text" placeholder="Username" onChange={e => setCreds({...creds, username: e.target.value})} required />
-//       <input style={{ width: '100%', padding: '16px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '20px' }} type="password" placeholder="Password" onChange={e => setCreds({...creds, password: e.target.value})} required />
-//       {/* <button type="submit" style={{ width: '100%', padding: '10px', justifyContent: 'center', backgroundColor: isLogin ? '#2563eb' : '#10b981', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>
-//         {isLogin ? 'LOG IN' : 'CREATE ACCOUNT'} <ArrowRight size={20} style={{ marginLeft: '10px'}}/>
-//      </button> */}
-//      <button type="submit" style={styles.btnPrimary(isLogin)}>
-//         <span>{isLogin ? 'LOG IN' : 'CREATE ACCOUNT'}</span>
-//         <ArrowRight size={20} />
-//       </button>
-//       <button type="button" onClick={() => setIsLogin(!isLogin)} style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: 900, cursor: 'pointer', marginTop: '25px', width: '100%' }}>
-//         {isLogin ? "New to Shopsy? Signup" : "Back to Login"}
-//       </button>
-//     </form>
-//   );
-// }
-
-// function Navbar({ onLogout }) {
-//   const token = localStorage.getItem('token');
-//   const headers = { headers: { Authorization: `Bearer ${token}` } };
-
-//   const showCart = async () => {
-//     const res = await axios.get(`${API_BASE_URL}/carts`, headers);
-//     const msg = res.data.items?.map(i => `cart_id: ${res.data._id}, item_id: ${i.itemId}`).join('\n');
-//     window.alert(msg || "Cart is empty"); // Requirement: Alert cart items
-//   };
-
-//   const showHistory = async () => {
-//     const res = await axios.get(`${API_BASE_URL}/orders`, headers);
-//     const msg = res.data.map(o => `Order ID: ${o._id}`).join('\n');
-//     window.alert(msg || "No History Found"); // Requirement: Alert order IDs
-//   };
-
-//   const handleCheckout = async () => {
-//     try {
-//       await axios.post(`${API_BASE_URL}/orders`, {}, headers);
-//       window.alert("Order successful");
-//     } catch { window.alert("Checkout failed"); }
-//   };
-
-//   return (
-//     <nav style={{ background: 'white', padding: '20px 8%', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', sticky: 'top', zIndex: 100 }}>
-//       <h1 style={{ fontWeight: 900, fontStyle: 'italic', margin: 0 }}>ABCDE SHOPSY</h1>
-//       <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
-//         <button onClick={showCart} style={{ border: 'none', background: 'none', fontWeight: 'bold', cursor: 'pointer', color: '#64748b' }}>CART</button>
-//         <button onClick={showHistory} style={{ border: 'none', background: 'none', fontWeight: 'bold', cursor: 'pointer', color: '#64748b' }}>HISTORY</button>
-//         {/* <button onClick={handleCheckout} style={{ backgroundColor: 'black', color: 'white', padding: '12px 28px', borderRadius: '4px', border: 'none', fontWeight: 900, cursor: 'pointer' }}>
-//           <CheckCircle size={16} style={{ marginRight: '8px', verticalAlign: 'middle' }} /> CHECKOUT
-//         </button> */}
-//         <button onClick={handleCheckout} style={styles.checkoutBtn}><CheckCircle size={16} /> CHECKOUT</button>
-//         <button onClick={onLogout} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#94a3b8' }}><LogOut size={24} /></button>
-//       </div>
-//     </nav>
-//   );
-// }
-
-// function ItemList() {
-//   const [items, setItems] = useState([]);
-//   useEffect(() => {
-//     axios.get(`${API_BASE_URL}/items`).then(res => setItems(res.data)).catch(() => {});
-//   }, []);
-
-//   const addToCart = async (id) => {
-//     const token = localStorage.getItem('token');
-//     await axios.post(`${API_BASE_URL}/carts`, { itemId: id }, { headers: { Authorization: `Bearer ${token}` } });
-//     window.alert("Added to cart!");
-//   };
-
-//   return (
-//     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '40px' }}>
-//       {items.map(item => (
-//         <div key={item._id} style={{ backgroundColor: 'white', padding: '35px', borderRadius: '4px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-//           <img src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-products-img.png" alt="p" style={{ width: '80%', marginBottom: '20px' }} />
-//           <h3 style={{ fontSize: '20px', fontWeight: 'bold', margin: '0 0 10px 0' }}>{item.name}</h3>
-//           <p style={{ fontSize: '28px', fontWeight: 900, color: '#0f172a' }}>$1,299</p>
-//           <button onClick={() => addToCart(item._id)} style={{ padding: '12px 25px', backgroundColor: '#2563eb', color: 'white', borderRadius: '4px', border: 'none', fontWeight: 'bold', cursor: 'pointer', width: '100%' }}>ADD TO CART</button>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
-  ShoppingBag, History, LogOut, Plus, 
-  User, Lock, ArrowRight, CheckCircle, ShoppingCart, Package, X, Camera 
+  ShoppingBag, LogOut, Plus, 
+   ArrowRight,  Package, X, 
 } from 'lucide-react';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
-// --- STYLES ---
+
 const styles = {
   loginPage: {
     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -272,7 +47,6 @@ const styles = {
   }
 };
 
-// --- SUB-COMPONENTS (Defined first to avoid hoisting issues) ---
 
 function AuthHeader() {
   return (
@@ -311,9 +85,9 @@ function LoginForm({ setLoggedIn, onAuthSuccess }) {
       }
     } catch (err) {
       if (err.response?.status === 403) {
-        window.alert('You cannot login on another device.'); // PDF Rule 1.2
+        window.alert('You cannot login on another device.'); 
       } else {
-        window.alert('Invalid username/password'); // PDF Rule 4.1
+        window.alert('Invalid username/password'); 
       }
     }
   };
@@ -391,27 +165,34 @@ function Navbar({ onLogout, onAddClick }) {
   const token = localStorage.getItem('token');
   const headers = { headers: { Authorization: `Bearer ${token}` } };
 
-  const fetchAlert = async (path, title) => {
-    try {
-      const res = await axios.get(`${API_BASE_URL}/${path}`, headers);
-      if (path === 'carts') {
-        // PDF Rule 4.3.a: Show cart_id and item_id
-        const items = res.data.items?.map(i => `Item ID: ${i.itemId}`).join('\n') || "No items";
-        window.alert(`CART DETAILS\nCart ID: ${res.data._id}\n\n${items}`);
-      } else {
-        // PDF Rule 4.3.b: Show placed Order IDs
-        const msg = res.data.map(o => `Order ID: ${o._id}`).join('\n');
-        window.alert(`ORDER HISTORY\n\n${msg || "No history found"}`);
-      }
-    } catch { window.alert("Session Error: Please login again."); }
-  };
+  const fetchAlert  = async (path) => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}/${path}`, headers);
+    if (path === 'carts') {
+      
+      const cartId = res.data._id;
+      const itemIds = res.data.items?.map(i => `Item ID: ${i.itemId}`).join('\n') || "Empty";
+      window.alert(`CART DETAILS\nCart ID: ${cartId}\n\nItems:\n${itemIds}`);
+    } else {
+      
+      const orderIds = res.data.map(o => `Order ID: ${o._id}`).join('\n');
+      window.alert(`ORDER HISTORY\n\n${orderIds || "No history found"}`);
+    }
+  } catch (err) {
+    window.alert("Session Error or Failed to fetch details.");
+  }
+};
 
-  const handleCheckout = async () => {
-    try {
-      await axios.post(`${API_BASE_URL}/orders`, {}, headers);
-      window.alert("Order successful"); // PDF Rule 4.4
-    } catch { window.alert("Checkout failed: Your cart is empty."); }
-  };
+const handleCheckout = async () => {
+  try {
+    await axios.post(`${API_BASE_URL}/orders`, {}, headers);
+    window.alert("Order successful");
+    
+    window.location.reload(); 
+  } catch (err) {
+    window.alert(err.response?.data || "Checkout failed");
+  }
+};
 
   return (
     <nav style={{ backgroundColor: 'white', padding: '15px 8%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', flexShrink: 0 }}>
@@ -443,7 +224,7 @@ function ItemList({ refreshKey }) {
   const addToCart = async (id) => {
     try {
       await axios.post(`${API_BASE_URL}/carts`, { itemId: id }, { headers: { Authorization: `Bearer ${token}` } });
-      window.alert("Item Added to Cart"); // PDF Rule 4.2
+      window.alert("Item Added to Cart"); 
     } catch { window.alert("Add to Cart failed."); }
   };
 
@@ -481,8 +262,6 @@ function ItemList({ refreshKey }) {
   );
 }
 
-// --- MAIN APP COMPONENT ---
-
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentRoute, setCurrentRoute] = useState('LOGIN');
@@ -517,7 +296,7 @@ export default function App() {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     setCurrentRoute('LOGIN');
-    window.alert("Logged out successfully"); // PDF Rule 1.3 Cleanup
+    window.alert("Logged out successfully"); 
   };
 
   if (loading) return null;

@@ -9,31 +9,6 @@ const Login = ({ setLoggedIn }) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // const handleAuth = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   const endpoint = isLoginView ? 'users/login' : 'users';
-
-  //   try {
-  //     const res = await axios.post(`${API_URL}/${endpoint}`, { username, password });
-      
-  //     if (isLoginView) {
-  //       localStorage.setItem('token', res.data.token);
-  //       setLoggedIn(true);
-  //     } else {
-  //       window.alert("Registration successful! Welcome to ABCDE Shopsy. Please login now.");
-  //       setIsLoginView(true);
-  //     }
-  //   } catch (err) {
-  //     if (err.response?.status === 403) {
-  //       window.alert('You cannot login on another device.');
-  //     } else {
-  //       window.alert(err.response?.data || 'Invalid username or password');
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleAuth = async (e) => {
     e.preventDefault();
     const endpoint = isLogin ? 'users/login' : 'users/register';
@@ -51,9 +26,9 @@ const Login = ({ setLoggedIn }) => {
         setCreds({ username: '', password: '' });
       }
     } catch (err) {
-      // Requirement: Handle specific error case for single-device restriction
+      
       if (err.response && err.response.status === 403) {
-        // Show the specific popup as per Step 3.2
+      
         window.alert('You cannot login on another device.');
       } else {
         window.alert(err.response?.data || 'Invalid username/password');

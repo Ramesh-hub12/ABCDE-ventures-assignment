@@ -7,12 +7,19 @@ const orderSchema = new mongoose.Schema({
         required: true 
     },
     cart_id: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Cart', 
+        type: String, 
         required: true 
     },
-    status:{type :String, default:'Completed'},
-    createdAt: { 
+    items: [
+        {
+            itemId: { type: mongoose.Schema.Types.ObjectId, ref: 'Item' }
+        }
+    ],
+    status: { 
+        type: String, 
+        default: 'Completed' 
+    },
+    created_at: { 
         type: Date, 
         default: Date.now 
     }
