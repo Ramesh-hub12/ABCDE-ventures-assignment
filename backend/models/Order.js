@@ -6,11 +6,12 @@ const orderSchema = new mongoose.Schema({
         ref: 'User', 
         required: true 
     },
-    cartId: { 
+    cart_id: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Cart', 
         required: true 
     },
+    status:{type :String, default:'Completed'},
     createdAt: { 
         type: Date, 
         default: Date.now 

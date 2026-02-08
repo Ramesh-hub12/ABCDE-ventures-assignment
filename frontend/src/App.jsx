@@ -1,216 +1,293 @@
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { ShoppingBag, LogOut, Plus, User, Lock, ArrowRight, CheckCircle } from 'lucide-react';
+
+// const API_BASE_URL = 'http://localhost:5000/api';
+
+// const styles = {
+//   loginPage: {
+//     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+//     display: 'flex', justifyContent: 'center', alignItems: 'center',
+//     backgroundColor: '#f8fafc', zIndex: 9999, fontFamily: 'system-ui, sans-serif'
+//   },
+//   authCard: {
+//     backgroundColor: '#ffffff',
+//     padding: '50px',
+//     borderRadius: '4px', // Requirement: Square box look
+//     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', // Requirement: Heavy shadow
+//     width: '100%',
+//     maxWidth: '620px', // Requirement: Specific width
+//     textAlign: 'center',
+//     border: '1px solid #e2e8f0'
+//   },
+//   dashboard: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     width: '100vw',
+//     minHeight: '100vh', // Fix: Ensures full height
+//     backgroundColor: '#f1f5f9',
+//     margin: 0,
+//     padding: 0
+//   },
+//   btnPrimary: (isLogin) => ({
+//     width: '100%',
+//     padding: '18px',
+//     borderRadius: '4px',
+//     border: 'none',
+//     backgroundColor: isLogin ? '#2563eb' : '#10b981',
+//     color: 'white',
+//     fontSize: '16px',
+//     fontWeight: 'bold',
+//     cursor: 'pointer',
+//     marginTop: '10px',
+//     display: 'flex',           // Ensures grouping
+//     justifyContent: 'center',  // Centers the group
+//     alignItems: 'center',      // Vertically aligns text and icon
+//     gap: '12px'                // Provides clean spacing between text and arrow
+//   }),
+//   checkoutBtn: {
+//     backgroundColor: '#000000',
+//     color: 'white',
+//     padding: '12px 28px',
+//     borderRadius: '4px',
+//     border: 'none',
+//     fontWeight: '900',
+//     cursor: 'pointer',
+//     fontSize: '12px',
+//     textTransform: 'uppercase',
+//     letterSpacing: '2px',
+//     display: 'flex',
+//     alignItems: 'center',
+//     gap: '8px'
+//   }
+// };
+
+// export default function App() {
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+//   const [currentRoute, setCurrentRoute] = useState('LOGIN');
+
+//   const handleLogout = async () => {
+//     const token = localStorage.getItem('token');
+//     try {
+//       await axios.post(`${API_BASE_URL}/users/logout`, {}, { headers: { Authorization: `Bearer ${token}` } });
+//     } finally {
+//       localStorage.removeItem('token');
+//       setIsLoggedIn(false);
+//       setCurrentRoute('LOGIN');
+//       window.alert("Logout Complete");
+//     }
+//   };
+
+//   return (
+//     <>
+//       <style>{`
+//         html, body, #root { margin: 0; padding: 0; width: 100%; height: 100%; overflow-x: hidden; }
+//         * { box-sizing: border-box; }
+//       `}</style>
+      
+//       {currentRoute === 'LOGIN' ? (
+//         <div style={styles.loginPage}>
+//           <div style={styles.authCard}>
+//             <div style={{ marginBottom: '50px' }}>
+//               <ShoppingBag size={48} color="#2563eb" style={{ marginBottom: '20px' }} />
+//               <h1 style={{ fontSize: '42px', fontWeight: 900, fontStyle: 'italic', margin: 0 }}>ABCDE SHOPSY</h1>
+//               <p style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 'bold', marginTop: '12px', letterSpacing: '4px' }}>SECURE ACCESS PORTAL</p>
+//             </div>
+//             <LoginScreen setLoggedIn={setIsLoggedIn} onAuthSuccess={() => setCurrentRoute('HOME')} />
+//           </div>
+//         </div>
+//       ) : (
+//         <div style={styles.dashboard}>
+//           <Navbar onLogout={handleLogout} />
+//           <main style={{ flex: 1, padding: '40px 8%', width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
+//             <ItemList />
+//           </main>
+//           <footer style={{ padding: '30px', textAlign: 'center', background: 'white', borderTop: '1px solid #e2e8f0' }}>
+//             <p style={{ color: '#94a3b8', fontSize: '12px', fontWeight: 'bold' }}>ABCDE VENTURES © 2026</p>
+//           </footer>
+//         </div>
+//       )}
+//     </>
+//   );
+// }
+
+// function LoginScreen({ setLoggedIn, onAuthSuccess }) {
+//   const [isLogin, setIsLogin] = useState(true);
+//   const [creds, setCreds] = useState({ username: '', password: '' });
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     const path = isLogin ? 'users/login' : 'users';
+//     try {
+//       const res = await axios.post(`${API_BASE_URL}/${path}`, creds);
+//       if (isLogin) {
+//         localStorage.setItem('token', res.data.token);
+//         setLoggedIn(true);
+//         onAuthSuccess();
+//       } else {
+//         window.alert("User account gets created. Please Login.");
+//         setIsLogin(true);
+//       }
+//     } catch (err) {
+//       if (err.response?.status === 403) {
+//         window.alert('You are already logged in on another device.');
+//       } else {
+//         window.alert('Invalid username/password');
+//       }
+//     }
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmit} style={{ textAlign: 'left' }}>
+//       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '35px' }}>
+//         <div style={{ width: '8px', height: '28px', backgroundColor: isLogin ? '#2563eb' : '#10b981' }}></div>
+//         <h2 style={{ fontSize: '28px', fontWeight: 900 }}>{isLogin ? 'Sign In' : 'Sign Up'}</h2>
+//       </div>
+//       <input style={{ width: '100%', padding: '16px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '20px' }} type="text" placeholder="Username" onChange={e => setCreds({...creds, username: e.target.value})} required />
+//       <input style={{ width: '100%', padding: '16px', borderRadius: '4px', border: '1px solid #ddd', marginBottom: '20px' }} type="password" placeholder="Password" onChange={e => setCreds({...creds, password: e.target.value})} required />
+//       {/* <button type="submit" style={{ width: '100%', padding: '10px', justifyContent: 'center', backgroundColor: isLogin ? '#2563eb' : '#10b981', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>
+//         {isLogin ? 'LOG IN' : 'CREATE ACCOUNT'} <ArrowRight size={20} style={{ marginLeft: '10px'}}/>
+//      </button> */}
+//      <button type="submit" style={styles.btnPrimary(isLogin)}>
+//         <span>{isLogin ? 'LOG IN' : 'CREATE ACCOUNT'}</span>
+//         <ArrowRight size={20} />
+//       </button>
+//       <button type="button" onClick={() => setIsLogin(!isLogin)} style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: 900, cursor: 'pointer', marginTop: '25px', width: '100%' }}>
+//         {isLogin ? "New to Shopsy? Signup" : "Back to Login"}
+//       </button>
+//     </form>
+//   );
+// }
+
+// function Navbar({ onLogout }) {
+//   const token = localStorage.getItem('token');
+//   const headers = { headers: { Authorization: `Bearer ${token}` } };
+
+//   const showCart = async () => {
+//     const res = await axios.get(`${API_BASE_URL}/carts`, headers);
+//     const msg = res.data.items?.map(i => `cart_id: ${res.data._id}, item_id: ${i.itemId}`).join('\n');
+//     window.alert(msg || "Cart is empty"); // Requirement: Alert cart items
+//   };
+
+//   const showHistory = async () => {
+//     const res = await axios.get(`${API_BASE_URL}/orders`, headers);
+//     const msg = res.data.map(o => `Order ID: ${o._id}`).join('\n');
+//     window.alert(msg || "No History Found"); // Requirement: Alert order IDs
+//   };
+
+//   const handleCheckout = async () => {
+//     try {
+//       await axios.post(`${API_BASE_URL}/orders`, {}, headers);
+//       window.alert("Order successful");
+//     } catch { window.alert("Checkout failed"); }
+//   };
+
+//   return (
+//     <nav style={{ background: 'white', padding: '20px 8%', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', sticky: 'top', zIndex: 100 }}>
+//       <h1 style={{ fontWeight: 900, fontStyle: 'italic', margin: 0 }}>ABCDE SHOPSY</h1>
+//       <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
+//         <button onClick={showCart} style={{ border: 'none', background: 'none', fontWeight: 'bold', cursor: 'pointer', color: '#64748b' }}>CART</button>
+//         <button onClick={showHistory} style={{ border: 'none', background: 'none', fontWeight: 'bold', cursor: 'pointer', color: '#64748b' }}>HISTORY</button>
+//         {/* <button onClick={handleCheckout} style={{ backgroundColor: 'black', color: 'white', padding: '12px 28px', borderRadius: '4px', border: 'none', fontWeight: 900, cursor: 'pointer' }}>
+//           <CheckCircle size={16} style={{ marginRight: '8px', verticalAlign: 'middle' }} /> CHECKOUT
+//         </button> */}
+//         <button onClick={handleCheckout} style={styles.checkoutBtn}><CheckCircle size={16} /> CHECKOUT</button>
+//         <button onClick={onLogout} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#94a3b8' }}><LogOut size={24} /></button>
+//       </div>
+//     </nav>
+//   );
+// }
+
+// function ItemList() {
+//   const [items, setItems] = useState([]);
+//   useEffect(() => {
+//     axios.get(`${API_BASE_URL}/items`).then(res => setItems(res.data)).catch(() => {});
+//   }, []);
+
+//   const addToCart = async (id) => {
+//     const token = localStorage.getItem('token');
+//     await axios.post(`${API_BASE_URL}/carts`, { itemId: id }, { headers: { Authorization: `Bearer ${token}` } });
+//     window.alert("Added to cart!");
+//   };
+
+//   return (
+//     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '40px' }}>
+//       {items.map(item => (
+//         <div key={item._id} style={{ backgroundColor: 'white', padding: '35px', borderRadius: '4px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+//           <img src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-products-img.png" alt="p" style={{ width: '80%', marginBottom: '20px' }} />
+//           <h3 style={{ fontSize: '20px', fontWeight: 'bold', margin: '0 0 10px 0' }}>{item.name}</h3>
+//           <p style={{ fontSize: '28px', fontWeight: 900, color: '#0f172a' }}>$1,299</p>
+//           <button onClick={() => addToCart(item._id)} style={{ padding: '12px 25px', backgroundColor: '#2563eb', color: 'white', borderRadius: '4px', border: 'none', fontWeight: 'bold', cursor: 'pointer', width: '100%' }}>ADD TO CART</button>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
-  ShoppingBag, 
-  History, 
-  LogOut, 
-  Plus, 
-  ShoppingCart, 
-  Package,
-  User, 
-  Lock,
-  ArrowRight,
-  AlertCircle,
-  CheckCircle
+  ShoppingBag, History, LogOut, Plus, 
+  User, Lock, ArrowRight, CheckCircle, ShoppingCart, Package, X, Camera 
 } from 'lucide-react';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
+// --- STYLES ---
 const styles = {
   loginPage: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    background: '#f8fafc',
-    margin: 0,
-    padding: '20px',
-    boxSizing: 'border-box',
-    fontFamily: 'system-ui, -apple-system, sans-serif',
-    zIndex: 9999
-  },
-  dashboardPage: {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100vh',
-    width: '100%',
-    backgroundColor: '#f1f5f9',
-    margin: 0,
-    padding: 0,
-    boxSizing: 'border-box',
-    fontFamily: 'system-ui, -apple-system, sans-serif'
+    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+    display: 'flex', justifyContent: 'center', alignItems: 'center',
+    backgroundColor: '#f8fafc', zIndex: 9999, fontFamily: 'system-ui, sans-serif'
   },
   authCard: {
-    backgroundColor: '#ffffff',
-    padding: '50px',
-    borderRadius: '4px',
-    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-    width: '100%',
-    maxWidth: '620px',
-    textAlign: 'center'
+    backgroundColor: '#ffffff', padding: '50px', borderRadius: '4px',
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', width: '100%',
+    maxWidth: '620px', textAlign: 'center', border: '1px solid #e2e8f0'
   },
-  inputGroup: {
-    textAlign: 'left',
-    marginBottom: '18px'
+  modalOverlay: {
+    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: 'rgba(15, 23, 42, 0.8)', display: 'flex',
+    justifyContent: 'center', alignItems: 'center', zIndex: 10000,
+    backdropFilter: 'blur(4px)'
   },
-  label: {
-    fontSize: '10px',
-    fontWeight: '900',
-    color: '#94a3b8',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    marginBottom: '8px',
-    display: 'block',
-    marginLeft: '4px'
+  modalContent: {
+    backgroundColor: 'white', padding: '40px', borderRadius: '4px',
+    width: '90%', maxWidth: '500px', position: 'relative', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'
   },
-  input: {
-    width: '100%',
-    padding: '16px 20px',
-    borderRadius: '16px',
-    border: '1px solid #e2e8f0',
-    backgroundColor: '#f8fafc',
-    fontSize: '15px',
-    boxSizing: 'border-box',
-    outline: 'none'
+  formInput: {
+    width: '100%', padding: '12px 15px', borderRadius: '4px', border: '1px solid #e2e8f0',
+    marginBottom: '15px', outline: 'none', fontSize: '14px', fontFamily: 'inherit'
   },
   btnPrimary: (isLogin) => ({
-    width: '100%',
-    padding: '18px',
-    borderRadius: '20px',
-    border: 'none',
+    width: '100%', padding: '18px', borderRadius: '4px', border: 'none',
     backgroundColor: isLogin ? '#2563eb' : '#10b981',
-    color: 'white',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    marginTop: '15px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '10px',
-    boxShadow: isLogin ? '0 10px 15px -3px rgba(37, 99, 235, 0.2)' : '0 10px 15px -3px rgba(16, 185, 129, 0.2)'
+    color: 'white', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer',
+    marginTop: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px'
   }),
   checkoutBtn: {
-    backgroundColor: '#000000',
-    color: 'white',
-    padding: '12px 28px',
-    borderRadius: '50px',
-    border: 'none',
-    fontWeight: '900',
-    cursor: 'pointer',
-    fontSize: '12px',
-    textTransform: 'uppercase',
-    letterSpacing: '2px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
+    backgroundColor: '#000000', color: 'white', padding: '10px 24px',
+    borderRadius: '4px', border: 'none', fontWeight: '900', cursor: 'pointer',
+    fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px',
+    display: 'flex', alignItems: 'center', gap: '8px'
   }
 };
 
-export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentRoute, setCurrentRoute] = useState('LOGIN');
-  const [loading, setLoading] = useState(true);
+// --- SUB-COMPONENTS (Defined first to avoid hoisting issues) ---
 
-  useEffect(() => {
-    const validate = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          await axios.get(`${API_BASE_URL}/items`, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          setIsLoggedIn(true);
-          setCurrentRoute('HOME');
-        } catch (err) {
-          localStorage.removeItem('token');
-          setIsLoggedIn(false);
-          setCurrentRoute('LOGIN');
-        }
-      } else {
-        setIsLoggedIn(false);
-        setCurrentRoute('LOGIN');
-      }
-      setLoading(false);
-    };
-    validate();
-  }, [isLoggedIn]);
-
-  const handleLogout = async () => {
-    const token = localStorage.getItem('token');
-    try {
-      if (token) {
-        await axios.post(`${API_BASE_URL}/users/logout`, {}, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-      }
-    } catch (err) {}
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    setCurrentRoute('LOGIN');
-    window.alert("Logged out of ABCDE Shopsy");
-  };
-
-  if (loading) return (
-    <div style={{display:'flex', justifyContent:'center', alignItems:'center', height:'100vh', backgroundColor:'#f8fafc'}}>
-      <div className="spinner"></div>
-    </div>
-  );
-
+function AuthHeader() {
   return (
-    <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
-      {currentRoute === 'LOGIN' ? (
-        <div style={styles.loginPage}>
-          <div style={styles.authCard}>
-            <div style={{ marginBottom: '40px' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>
-                <div style={{ backgroundColor: '#f1f5f9', padding: '15px', borderRadius: '20px' }}>
-                  <ShoppingBag size={40} color="#2563eb" />
-                </div>
-              </div>
-              <h1 style={{ fontSize: '38px', fontWeight: '900', fontStyle: 'italic', margin: 0, color: '#0f172a', letterSpacing: '-2px' }}>
-                ABCDE <span style={{ color: '#2563eb' }}>SHOPSY</span>
-              </h1>
-              <p style={{ color: '#94a3b8', fontSize: '10px', fontWeight: 'bold', marginTop: '12px', letterSpacing: '3px', textTransform: 'uppercase' }}>
-                Secure Access Portal
-              </p>
-            </div>
-            <LoginForm setLoggedIn={setIsLoggedIn} onAuthSuccess={() => setCurrentRoute('HOME')} />
-          </div>
+    <div style={{ marginBottom: '50px' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+        <div style={{ backgroundColor: '#f1f5f9', padding: '15px', borderRadius: '8px' }}>
+          <ShoppingBag size={48} color="#2563eb" />
         </div>
-      ) : (
-        <div style={styles.dashboardPage}>
-          <Navbar onLogout={handleLogout} setCurrentRoute={setCurrentRoute} currentRoute={currentRoute} />
-          <main style={{ flex: 1, padding: '40px 5%', maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-            <ItemList />
-          </main>
-          <footer style={{ backgroundColor: 'white', borderTop: '1px solid #e2e8f0', padding: '40px 0', textAlign: 'center' }}>
-            <h1 style={{ fontSize: '20px', fontWeight: '900', fontStyle: 'italic', margin: 0, color: '#0f172a', opacity: 0.3 }}>
-              ABCDE <span style={{ color: '#2563eb' }}>SHOPSY</span>
-            </h1>
-            <p style={{ color: '#94a3b8', fontSize: '10px', fontWeight: 'bold', marginTop: '8px', textTransform: 'uppercase', letterSpacing: '2px' }}>
-              Powered by ABCDE Ventures
-            </p>
-          </footer>
-        </div>
-      )}
-      <style>{`
-        html, body, #root { 
-          margin: 0; 
-          padding: 0; 
-          width: 100% !important; 
-          height: 100% !important; 
-          overflow-x: hidden;
-          background-color: #f1f5f9;
-        }
-        * { box-sizing: border-box; }
-        .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #2563eb; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
+      </div>
+      <h1 style={{ fontSize: '42px', fontWeight: 900, fontStyle: 'italic', margin: 0, color: '#1e293b' }}>
+        ABCDE <span style={{ color: '#2563eb' }}>SHOPSY</span>
+      </h1>
+      <p style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 'bold', marginTop: '12px', letterSpacing: '4px' }}>
+        SECURE ACCESS PORTAL
+      </p>
     </div>
   );
 }
@@ -218,15 +295,10 @@ export default function App() {
 function LoginForm({ setLoggedIn, onAuthSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
   const [creds, setCreds] = useState({ username: '', password: '' });
-  const [errorMsg, setErrorMsg] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAuth = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setErrorMsg('');
-    const endpoint = isLogin ? 'users/login' : 'users';
-    
+    const endpoint = isLogin ? 'users/login' : 'users/register';
     try {
       const res = await axios.post(`${API_BASE_URL}/${endpoint}`, creds);
       if (isLogin) {
@@ -234,161 +306,257 @@ function LoginForm({ setLoggedIn, onAuthSuccess }) {
         setLoggedIn(true);
         onAuthSuccess();
       } else {
-        window.alert("Account created successfully! You can now login.");
+        window.alert("User account gets created! Please Login.");
         setIsLogin(true);
-        setCreds({ username: '', password: '' });
       }
     } catch (err) {
-      const data = err.response?.data;
       if (err.response?.status === 403) {
-        setErrorMsg('You cannot login on another device.');
-      } else if (typeof data === 'string' && data.includes('E11000')) {
-        setErrorMsg('Username already exists. Choose another.');
+        window.alert('You cannot login on another device.'); // PDF Rule 1.2
       } else {
-        setErrorMsg('Invalid username or password');
+        window.alert('Invalid username/password'); // PDF Rule 4.1
       }
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleAuth}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '30px' }}>
-        <div style={{ width: '6px', height: '24px', backgroundColor: isLogin ? '#2563eb' : '#10b981', borderRadius: '10px' }}></div>
-        <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0, color: '#1e293b' }}>
-          {isLogin ? 'Sign In' : 'Create Account'}
-        </h2>
+    <form onSubmit={handleAuth} style={{ textAlign: 'left' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '35px' }}>
+        <div style={{ width: '8px', height: '28px', backgroundColor: isLogin ? '#2563eb' : '#10b981' }}></div>
+        <h2 style={{ fontSize: '28px', fontWeight: 900, margin: 0 }}>{isLogin ? 'Sign In' : 'Sign Up'}</h2>
       </div>
-      <div style={styles.inputGroup}>
-        <label style={styles.label}>Username</label>
-        <div style={{ position: 'relative' }}>
-          <User size={16} style={{ position: 'absolute', left: '15px', top: '18px', color: '#94a3b8' }} />
-          <input 
-            style={{ ...styles.input, paddingLeft: '45px' }}
-            type="text" 
-            placeholder="Enter username" 
-            value={creds.username}
-            onChange={(e) => setCreds({...creds, username: e.target.value})}
-            required 
-          />
-        </div>
-      </div>
-      <div style={styles.inputGroup}>
-        <label style={styles.label}>Password</label>
-        <div style={{ position: 'relative' }}>
-          <Lock size={16} style={{ position: 'absolute', left: '15px', top: '18px', color: '#94a3b8' }} />
-          <input 
-            style={{ ...styles.input, paddingLeft: '45px' }}
-            type="password" 
-            placeholder="Enter password" 
-            value={creds.password}
-            onChange={(e) => setCreds({...creds, password: e.target.value})}
-            required 
-          />
-        </div>
-      </div>
-      {errorMsg && (
-        <div style={{ color: '#ef4444', fontSize: '12px', fontWeight: 'bold', backgroundColor: '#fef2f2', padding: '12px', borderRadius: '12px', marginBottom: '20px', border: '1px solid #fee2e2', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <AlertCircle size={14} /> {errorMsg}
-        </div>
-      )}
-      <button type="submit" disabled={isSubmitting} style={styles.btnPrimary(isLogin)}>
-        {isSubmitting ? 'PLEASE WAIT...' : (isLogin ? 'SIGN IN' : 'CREATE ACCOUNT')} 
-        {!isSubmitting && <ArrowRight size={18} />}
+      <input 
+        style={{ ...styles.formInput, padding: '16px' }} 
+        placeholder="Username" 
+        value={creds.username}
+        onChange={e => setCreds({...creds, username: e.target.value})} 
+        required 
+      />
+      <input 
+        type="password" 
+        style={{ ...styles.formInput, padding: '16px' }} 
+        placeholder="Password" 
+        value={creds.password}
+        onChange={e => setCreds({...creds, password: e.target.value})} 
+        required 
+      />
+      <button type="submit" style={styles.btnPrimary(isLogin)}>
+        <span>{isLogin ? 'LOG IN' : 'CREATE ACCOUNT'}</span>
+        <ArrowRight size={20} />
       </button>
-      <div style={{ marginTop: '25px' }}>
-        <button 
-          type="button" 
-          onClick={() => { setIsLogin(!isLogin); setErrorMsg(''); }}
-          style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: '800', cursor: 'pointer', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px' }}
-        >
-          {isLogin ? "New to Shopsy? Signup" : "Already a member? Login"}
-        </button>
-      </div>
+      <button 
+        type="button" 
+        onClick={() => setIsLogin(!isLogin)} 
+        style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', marginTop: '25px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '1px', width: '100%', fontSize: '13px' }}
+      >
+        {isLogin ? "New user? Create an account" : "Back to Login"}
+      </button>
     </form>
   );
 }
 
-function Navbar({ onLogout, setCurrentRoute, currentRoute }) {
+function AddItemModal({ onClose, onSuccess }) {
+  const [formData, setFormData] = useState({ name: '', description: '', price: '', imageUrl: '' });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${API_BASE_URL}/items`, formData);
+      window.alert("Product listed successfully!");
+      onSuccess();
+    } catch (err) {
+      window.alert("Failed to add product.");
+    }
+  };
+
+  return (
+    <div style={styles.modalOverlay}>
+      <div style={styles.modalContent}>
+        <button onClick={onClose} style={{ position: 'absolute', top: '20px', right: '20px', border: 'none', background: 'none', cursor: 'pointer', color: '#94a3b8' }}>
+          <X size={24} />
+        </button>
+        <h2 style={{ fontWeight: 900, fontSize: '24px', marginBottom: '25px', color: '#1e293b' }}>Add New Product</h2>
+        <form onSubmit={handleSubmit}>
+          <input style={styles.formInput} placeholder="Product Name" onChange={e => setFormData({...formData, name: e.target.value})} required />
+          <textarea style={{ ...styles.formInput, height: '80px', resize: 'none' }} placeholder="Description" onChange={e => setFormData({...formData, description: e.target.value})} required />
+          <input type="number" style={styles.formInput} placeholder="Price ($)" onChange={e => setFormData({...formData, price: e.target.value})} required />
+          <input style={styles.formInput} placeholder="Picture URL (Optional)" onChange={e => setFormData({...formData, imageUrl: e.target.value})} />
+          <button type="submit" style={{ ...styles.btnPrimary(true), marginTop: '10px' }}>LIST PRODUCT</button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function Navbar({ onLogout, onAddClick }) {
   const token = localStorage.getItem('token');
   const headers = { headers: { Authorization: `Bearer ${token}` } };
-  const handleAction = async (endpoint, title) => {
+
+  const fetchAlert = async (path, title) => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/${endpoint}`, headers);
-      const data = endpoint === 'carts' ? (res.data.items?.map(i => i.itemId).join(', ') || "No items") : res.data.map(o => o._id).join(', ');
-      window.alert(`${title}:\n------------------\n${data || "Nothing found"}`);
-    } catch { window.alert("Session Error. Please login again."); }
+      const res = await axios.get(`${API_BASE_URL}/${path}`, headers);
+      if (path === 'carts') {
+        // PDF Rule 4.3.a: Show cart_id and item_id
+        const items = res.data.items?.map(i => `Item ID: ${i.itemId}`).join('\n') || "No items";
+        window.alert(`CART DETAILS\nCart ID: ${res.data._id}\n\n${items}`);
+      } else {
+        // PDF Rule 4.3.b: Show placed Order IDs
+        const msg = res.data.map(o => `Order ID: ${o._id}`).join('\n');
+        window.alert(`ORDER HISTORY\n\n${msg || "No history found"}`);
+      }
+    } catch { window.alert("Session Error: Please login again."); }
   };
+
   const handleCheckout = async () => {
     try {
       await axios.post(`${API_BASE_URL}/orders`, {}, headers);
-      window.alert("Order successful");
-    } catch { window.alert("Checkout failed. Is your cart empty?"); }
+      window.alert("Order successful"); // PDF Rule 4.4
+    } catch { window.alert("Checkout failed: Your cart is empty."); }
   };
+
   return (
-    <nav style={{ backgroundColor: 'white', padding: '20px 8%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', sticky: 'top', zIndex: 100, width: '100%', boxSizing: 'border-box' }}>
-      <h1 style={{ fontSize: '24px', fontWeight: '900', fontStyle: 'italic', margin: 0 }}>
-        ABCDE <span style={{ color: '#2563eb' }}>SHOPSY</span>
-      </h1>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
-        <button onClick={() => setCurrentRoute('HOME')} style={{ background: 'none', border: 'none', fontWeight: 'bold', cursor: 'pointer', color: currentRoute === 'HOME' ? '#2563eb' : '#64748b', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>Products</button>
-        <button onClick={() => handleAction('carts', 'Cart')} style={{ background: 'none', border: 'none', fontWeight: 'bold', cursor: 'pointer', color: '#64748b', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>Cart</button>
-        <button onClick={() => handleAction('orders', 'History')} style={{ background: 'none', border: 'none', fontWeight: 'bold', cursor: 'pointer', color: '#64748b', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>History</button>
-        <button onClick={handleCheckout} style={styles.checkoutBtn}>
-          <CheckCircle size={16} color="#10b981" /> Checkout
+    <nav style={{ backgroundColor: 'white', padding: '15px 8%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', flexShrink: 0 }}>
+      <div style={{ lineHeight: '1' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#1e293b', margin: 0 }}>ABCDE</h1>
+        <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#1e293b', margin: 0 }}>SHOPSY</h1>
+      </div>
+      <div style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
+        <button onClick={onAddClick} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#f1f5f9', border: '1px solid #e2e8f0', padding: '8px 16px', borderRadius: '4px', fontWeight: 'bold', fontSize: '11px', color: '#2563eb', cursor: 'pointer' }}>
+          <Plus size={16} /> ADD PRODUCT
         </button>
-        <button onClick={onLogout} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '5px' }}>
-          <LogOut size={22} />
-        </button>
+        <button onClick={() => fetchAlert('carts', 'Cart')} style={{ background: 'none', border: 'none', fontWeight: '800', cursor: 'pointer', color: '#64748b', fontSize: '11px' }}>CART</button>
+        <button onClick={() => fetchAlert('orders', 'History')} style={{ background: 'none', border: 'none', fontWeight: '800', cursor: 'pointer', color: '#64748b', fontSize: '11px' }}>HISTORY</button>
+        <button onClick={handleCheckout} style={styles.checkoutBtn}>CHECKOUT</button>
+        <button onClick={onLogout} style={{ border: 'none', background: 'none', color: '#94a3b8', cursor: 'pointer' }}><LogOut size={22} /></button>
       </div>
     </nav>
   );
 }
 
-function ItemList() {
+function ItemList({ refreshKey }) {
   const [items, setItems] = useState([]);
   const token = localStorage.getItem('token');
+
   useEffect(() => {
     axios.get(`${API_BASE_URL}/items`).then(res => setItems(res.data)).catch(() => {});
-  }, []);
-  const addToCart = async (itemId) => {
+  }, [refreshKey]);
+
+  const addToCart = async (id) => {
     try {
-      await axios.post(`${API_BASE_URL}/carts`, { itemId }, { headers: { Authorization: `Bearer ${token}` } });
-      window.alert("Item added to cart!");
-    } catch { window.alert("Failed to add."); }
+      await axios.post(`${API_BASE_URL}/carts`, { itemId: id }, { headers: { Authorization: `Bearer ${token}` } });
+      window.alert("Item Added to Cart"); // PDF Rule 4.2
+    } catch { window.alert("Add to Cart failed."); }
   };
+
   return (
-    <div style={{ width: '100%' }}>
-      <div style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '36px', fontWeight: '900', margin: 0, color: '#0f172a' }}>Catalog</h2>
-        <div style={{ width: '60px', height: '6px', backgroundColor: '#2563eb', borderRadius: '10px', marginTop: '10px' }}></div>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '40px' }}>
-        {items.map(item => (
-          <div key={item._id} style={{ backgroundColor: 'white', padding: '35px', borderRadius: '40px', border: '1px solid #f1f5f9', textAlign: 'center' }}>
-            <div style={{ backgroundColor: '#f8fafc', padding: '25px', borderRadius: '30px', marginBottom: '25px', position: 'relative' }}>
-              <img src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-products-img.png" alt="p" style={{ width: '80%' }} />
-              <div style={{ position: 'absolute', top: '15px', right: '15px', backgroundColor: 'white', padding: '5px 12px', borderRadius: '20px', fontSize: '10px', fontWeight: 'bold', color: '#2563eb', border: '1px solid #e2e8f0' }}>New</div>
-            </div>
-            <h3 style={{ fontSize: '22px', fontWeight: 'bold', margin: '0 0 8px 0', color: '#1e293b' }}>{item.name}</h3>
-            <p style={{ color: '#94a3b8', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '25px' }}>Shopsy Collection</p>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '28px', fontWeight: '900', color: '#0f172a' }}>$1,299</span>
-              <button 
-                onClick={() => addToCart(item._id)} 
-                style={{ padding: '12px 25px', backgroundColor: '#2563eb', color: 'white', borderRadius: '18px', border: 'none', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
-              >
-                <Plus size={18} /> ADD
-              </button>
-            </div>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '40px' }}>
+      {items.map(item => (
+        <div key={item._id} style={{ backgroundColor: 'white', padding: '30px', borderRadius: '4px', border: '1px solid #e2e8f0', textAlign: 'center', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ backgroundColor: '#f8fafc', padding: '20px', borderRadius: '4px', marginBottom: '20px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+            <img 
+              src={item.imageUrl || "https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-products-img.png"} 
+              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} 
+              alt="product" 
+            />
           </div>
-        ))}
-      </div>
+          <h3 style={{ fontWeight: '800', fontSize: '18px', color: '#334155', margin: '0 0 8px 0' }}>{item.name}</h3>
+          <p style={{ fontSize: '12px', color: '#94a3b8', lineHeight: '1.5', margin: '0 0 20px 0', flex: 1 }}>{item.description}</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+            <p style={{ fontWeight: '900', fontSize: '24px', color: '#0f172a', margin: 0 }}>${item.price}</p>
+            <button 
+              onClick={() => addToCart(item._id)} 
+              style={{ padding: '10px 20px', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', fontSize: '12px' }}
+            >
+              ADD TO CART
+            </button>
+          </div>
+        </div>
+      ))}
       {items.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '100px 0', backgroundColor: 'white', borderRadius: '40px', border: '2px dashed #e2e8f0' }}>
-          <Package size={60} color="#e2e8f0" style={{ marginBottom: '20px' }} />
-          <p style={{ fontSize: '18px', fontWeight: 'bold', color: '#94a3b8', margin: 0 }}>The Shopsy store is quiet today...</p>
+        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '100px', border: '2px dashed #e2e8f0', borderRadius: '4px' }}>
+          <Package size={48} color="#e2e8f0" style={{ marginBottom: '20px' }} />
+          <p style={{ color: '#94a3b8', fontWeight: 'bold' }}>Catalog is empty. Add a product to get started!</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// --- MAIN APP COMPONENT ---
+
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentRoute, setCurrentRoute] = useState('LOGIN');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const validateSession = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          await axios.get(`${API_BASE_URL}/items`, { headers: { Authorization: `Bearer ${token}` } });
+          setIsLoggedIn(true);
+          setCurrentRoute('HOME');
+        } catch {
+          localStorage.removeItem('token');
+          setIsLoggedIn(false);
+          setCurrentRoute('LOGIN');
+        }
+      }
+      setLoading(false);
+    };
+    validateSession();
+  }, []);
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      await axios.post(`${API_BASE_URL}/users/logout`, {}, { headers: { Authorization: `Bearer ${token}` } });
+    } catch {}
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    setCurrentRoute('LOGIN');
+    window.alert("Logged out successfully"); // PDF Rule 1.3 Cleanup
+  };
+
+  if (loading) return null;
+
+  return (
+    <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
+      <style>{`
+        html, body, #root { margin: 0; padding: 0; width: 100% !important; height: 100% !important; overflow: hidden; background-color: #f8fafc; }
+        * { box-sizing: border-box; }
+      `}</style>
+
+      {currentRoute === 'LOGIN' ? (
+        <div style={styles.loginPage}>
+          <div style={styles.authCard}>
+            <AuthHeader />
+            <LoginForm setLoggedIn={setIsLoggedIn} onAuthSuccess={() => setCurrentRoute('HOME')} />
+          </div>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw' }}>
+          <Navbar onLogout={handleLogout} onAddClick={() => setShowAddModal(true)} />
+          <main style={{ flex: 1, overflowY: 'auto', padding: '40px 8%', width: '100%' }}>
+            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+              <div style={{ marginBottom: '40px' }}>
+                <h2 style={{ fontSize: '32px', fontWeight: '900', color: '#1e293b', margin: 0 }}>Product Catalog</h2>
+                <div style={{ width: '50px', height: '4px', backgroundColor: '#2563eb', marginTop: '10px' }}></div>
+              </div>
+              <ItemList refreshKey={refreshKey} />
+            </div>
+          </main>
+          <footer style={{ backgroundColor: 'white', borderTop: '1px solid #e2e8f0', padding: '20px 0', textAlign: 'center', flexShrink: 0 }}>
+            <p style={{ color: '#94a3b8', fontSize: '12px', fontWeight: 'bold', margin: 0 }}>ABCDE VENTURES © 2026</p>
+          </footer>
+          {showAddModal && (
+            <AddItemModal 
+              onClose={() => setShowAddModal(false)} 
+              onSuccess={() => { setShowAddModal(false); setRefreshKey(k => k + 1); }} 
+            />
+          )}
         </div>
       )}
     </div>
