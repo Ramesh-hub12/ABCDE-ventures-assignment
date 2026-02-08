@@ -7,7 +7,6 @@ const cartSchema = new mongoose.Schema({
         required: true, 
         unique: true 
     },
-    // We define items as an array of objects so we can store the itemId explicitly
     items: [{
         itemId: { 
             type: mongoose.Schema.Types.ObjectId, 
